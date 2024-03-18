@@ -1,0 +1,98 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Lab_02: TypeScript Basics",
+  "nextTour": "Lab_03: Conditionals",
+  "steps": [
+    {
+      "title": "Variables, Operators, Expressions, and Statements",
+      "description": "![TS](./.resources/ts.png)\n\nFYI: remember the scroll bar at the right of this CodeTour window, that will let you scroll here without the code in the source file above scrolling out of view!\n\nFirst things first:\n* Before you begin this lab please [close any open terminal windows](command:workbench.action.terminal.killAll).\n* [Install the Node.js modules](command:codetour.sendTextToTerminal?[\"npm install\"]) for this copy of the lab project.\n\n## Variables, Operators, and Expressions\n\nPrograms are made up of literal values (like 5), variables which hold a value that can change,\nexpressions that use literals and variables, and statements that are one or more expressions.\nData in both JavaScript and TypeScript is fluid and may be coerced.\nA string is a sequence of characters that may be manipulated or written outside of the program.\nIf a number is used where a string is expected, it is converted to a string representation.\nIf a string is used where a number is expected, if the characters represent a number the string will be used as a number,\notherwise an error occurs.\n\n### Data Types\n\nThe three primative data types are represented in TypeScript as class types: *Boolean*, *Number*, and *String*.\nThese are represented in declarations by the primitive keywords *boolean*, *number*, and *string*; they start with lower case letters.\nLiteral values are data represented literally in the program code:\n|Type|Example|\n|----|-------|\n|boolean|true|\n|boolean|false|\n|string|'this is a string literal'|\n|string|\"and so is this\"|\n|number|3.14|\n|number|36|\n|base 16 integer (36)|0x0024|\n|base 8 integer (36)|0o044|\n|base 2 integer (36)|0b00100100\n\n### Variable Scope\n\nJavaScript and TypeScript share the same variable scope delcarations:\n* var - a global variable, once defined can be used anywhere\n* let - a variable scoped to the code block in which it is defined, may override another variable\n* const - also scoped to the code block, but may not be changed once set\n\n### Type Declarations\n\nTypeScript adds type declarations, which allow the language to catch mistakes when the wrong type of data\nis used in an express or function call.\nThe type declaration does not block coercion, but it does generate messages when something could be wrong.\n```\nlet pi: number = 3.14\n```\n=, or assignment, is an *operator* with two operands: the literal 3.14 on the right is assigned into the variable on the left.\nUsing an operator is an *expression*, so assignment to a variable is an *assignment expression*.\n\n### Modify scratch.ts\n\nThis tour opened the source file scratch.ts, look above this window.\nSelect and delete the console.log() function call on line 3, [or have CodeTour remove it](command:deleteAllLeft)\n\nIn place of it declare a numeric variable named \"celsius\" and assign it a value of 21.5:\n\n```ts\nlet celsius: number = 21.5\n\n```\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 3,
+          "character": 1
+        },
+        "end": {
+          "line": 4,
+          "character": 1
+        },
+        "line": 4
+      },
+      "line": 4
+    },
+    {
+      "title": "Temperature Conversion",
+      "description": "TypeScript include all the expected operators. It supports combined assignment, and has an exponent:\n\n|Operator|Description|\n|--------|-----------|\n|+|Addition or string concatenation|\n|unary +|Make a string a number, or no-op|\n|-|Subtraction|\n|unary -|Flip the sign of a number|\n|*|Multiplication|\n|/|Division|\n|**|Exponent: raise to a power|\n|%|Remainder of integer division|\n|++|pre or post increment|\n|--|pre or post decrement|\n|=|Assignment|\n|+=, -=, *=, /=, etc.|Combined assigned operators|\n\nOf course some operators have precedence over other operators, * is done before +.\nPrecedence should be ignored; using parentheses tells the compiler, you when you come back, and anyone else looking at the code\nexactly what you intend to happen.  \n\nThe temperature conversion from Celsius to Fahrenheit is calculated with following compound expression assigned to the variable fahrenheit:\n\n```ts\nlet fahrenheit: number = (celsius * (9/5)) + 32;\n\n```\n\n### A Note about Single Responsibility\n\nThis is a \"statement\" made up of one or more expressions, specifically this is an \"assignment statement\".\nStatements and expressions should follow the \"single responsibility\" principle; at their level they should focus on performing one task.\n\"let y: number = x++ + 15\" violates this responsibility, the expression calculates a value for y and modifies x at the same time!\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 35,
+          "character": 1
+        },
+        "end": {
+          "line": 35,
+          "character": 55
+        },
+        "line": 35
+      },
+      "line": 35
+    },
+    {
+      "title": "Strings",
+      "description": "Strings are sequences of characters contained in quotation marks (\"\"), or single quotation marks ('').  \n\nStrings are immutable, the value cannot be changed.\nOf course the string referenced by a string variable may be substituted with an assignment statement.\n\nThe + operator may be used to concatenate strings together, producing a new string:\n\n```ts\nlet summary: string = 'The Celsius temperature ' + celsius + ' is ' + fahrenheit + ' Fahrenheit';\n\nconsole.log(summary);\n```\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 1
+        },
+        "end": {
+          "line": 5,
+          "character": 1
+        },
+        "line": 5
+      },
+      "line": 5
+    },
+    {
+      "title": "Build and run the program",
+      "description": "Build (npm run build) and run (npm start) the program, or use this link: [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"])",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 7,
+          "character": 1
+        },
+        "end": {
+          "line": 7,
+          "character": 1
+        },
+        "line": 7
+      },
+      "line": 7
+    },
+    {
+      "title": "Template Strings",
+      "description": "JavaScript and TypeScript have *Template Strings* which allow embedded expressions ${} inside of a string quoted with grav accent characters.\nThis is a cleaner, more maintainable way to build the summary.\nDo not start putting complex expressins in the middle of a template string, that would be a violation of single responsibility:\n\n```ts\nlet summary: string = `The Celsius value ${celsius} is ${fahrenheit} Fahrenheit`;\n\n```\n\n[Save your work.](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 1
+        },
+        "end": {
+          "line": 6,
+          "character": 1
+        },
+        "line": 6
+      },
+      "line": 6
+    },
+    {
+      "title": "Stop",
+      "description": "```\n\n\n\n```\n\nCongratulations, you have completed this lab!&nbsp;&nbsp;&nbsp;&nbsp;![stop](./.resources/stop.png)  \n\nWhen it is time to start the next lab click the next tour link below ![below](./.resources/below-optimized.png)",
+      "file": "./src/scratch.ts",
+      "line": 99
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Lab_01: Configure the project",
+  "nextTour": "Lab_02: TypeScript Basics",
+  "steps": [
+    {
+      "title": "Introduction",
+      "description": "![TS](./.resources/ts.png)  \n\n# Practical TypeScript\n\nWelcome to the lab environment for Practical TypeScript!  \n\nFYI, this immediate section is a lengthy introduction.\nThis \"CodeTour\" window is embedded in the larger editor window in Visual Studio Code.\nThe editor window has the larger scrollbar at the outer right.\nNotice the \"inner scrollbar\" to the right of the smaller CodeTour window , this can help you scroll just this window.\n\nPactical TypeScript is an introduction to the TypeScript language.\nThe focus is on what is needed to get up and running with TypeScript, centered on the language features needed to use for server applications\nand with frameworks like Angular and React.\nThere is a lot more to the TypeScript language than will be covered here, but those topics may be explored as they are encountered\nduring project development.\n\nProgramming experience with an understanding of data, variables, expressions, conditionals, and loops is expected for these labs.\nC, C++, Python, PHP, Java, C#, etc. are all examples of languages that will provide the required background.\nExperience with the JavaScript language is not required.\n\n## Resources\n\nTypeScript is built on the JavaScript language; it adds strong type checking.\nNetscape turned the JavaScript standard over to the European Computer Manufacturer's Association (ECMA) in 1996.\nThe true name of JavaScript is ECMAScript.\nECMAScript 6, aka ECMAScript 2015 or just ES2015 is the version where classes and many other features popped into existance.\nSome of these features were pioneered by TypeScript and moved to JavaScript; strong typing was not one of them.\n\nTypeScript is compiled (or more precisely \"transpiled\") into JavaScript to execute in a Web browser or a Node.js environment.\nA good reference for the TypeScript language is found at https://typescriptlang.org.\nThe Mozilla (Firefox) developer website offers an excellent reference for the underlying JavaScript libraries and functionality: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference.\n\n## CodeTour\n\nThese labs use CodeTour inside a GitHub CodeSpace to provide the environment to edit and test your TypeScript code.\nCodeTour is designed to take you on a tour of the code in a project.\nIn the lab environment it is used to provide instructions at each step, and offers automation of most of the tasks.  \n\nVisual Studio Code is open right now with multi-root workspaces.\nThe folders Lab_01-Lab_10 are separate workspace folders.\nRight now this CodeTour is in the first folder, Lab_01.\nEach folder starts with the solution from from the previous lab, so any lab may be left incomplete or skipped without having to worry about the next lab.  \n\nEach lab is divided into a series of tour steps that must be accomplished.\nEach step has an explanation of what will be accomplished.\nSome of the steps will use the command line in a the terminal window to create folders and files, or to compile and run the project.\nOther steps will contain code to add to the files.\n\n## Labs\n\nIf the step involves editing a file, the CodeTour window will appear nestled in the view of the file to edit,\nlook carefully for selected text and the current cursor position, because the CodeTour window position may shift.\nNormally it will be right above the CodeTour window.\nAs you type in the file the entered text may be split above and below the CodeTour window, that is normal.  \n\nYou are encouraged to take the manual route and type in commands to make the folders and files, build the project, and execute the program.\n\nThe CodeTour instructions will have automation links on the page to click if you want CodeTour to do the work for you.\nThese links will appear in a different color and the mouse cursor is a click-hand when hovering over them.\n\nWarnings:\n* Do not click the automated links if you manually accomplish the task, the work will be repeated.\n* Do not click the CodeTour links more than once, especially if you revisit a step, or code insertion and commands will be repeated.\n\nClick the previous and next steps at the bottom of the CodeTour window to navigate through the lab ![below](./.resources/below-optimized.png)",
+      "file": "./.resources/.placeholder",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        },
+        "line": 1
+      },
+      "line": 1
+    },
+    {
+      "title": "Create package.json",
+      "description": "Typescript projects are created in a Node.js environment.\nNode.js is an environment that supports executing JavaScript outside of a browser window, on a server or development computer.\nNode.js and the documenmtation is found at https://nodejs.org.\nTypeScript is used for two scenarios: a server-side service application (a Web service or API),\nor a single-page appliction (SPA) that runs on a client computer in a user's browser.\nThe server-side application uses Node.js to run the program,\nthe client-side application depends on Node.js to run the tools to build the delivery bundle for the browser.  \n\nThe package.json file contains the configuration for a Node.js project.\nThat includes information about the project, commands to build and run the project,\npackages (libraries) that the project depends on, and packages used during development of the project.  \n\nTo manually create the package.json file right-click in the white-space below the project files, select \"New File...\", and name it \"package.json\". Or, on the command line in a terminal run *touch ./package.json*, or click this link to create it from within the CodeTour: [create package.json](command:codetour.sendTextToTerminal?[\"touch package.json\"]).  \n\nAlternatively, you may also open the command palette from the VS Code \"View\" menu or the keyboard shortcuts (ctrl+shift+P on Microsoft Windows / cmd+shift+P on Apple MacOS), and select \"Create: New File\".  \n\nWhen you have completed this step, click on the link below to move to the next one ![below](./.resources/below-optimized.png)\n",
+      "file": "./.resources/.placeholder",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        },
+        "line": 1
+      },
+      "line": 1
+    },
+    {
+      "title": "Initialize package.json",
+      "description": "This step has opened the new package.json file. Enter the name, version, and license information into the file above (your input may split around these CodeTour instructions, that is OK):  \n\n```json\n{\n    \"name\": \"scratch-ts\",\n    \"version\": \"1.0.0\",\n    \"license\": \"none\"\n}\n```\n\nOr click the \"insert code\" link on the line above to have CodeTour insert the content for you! Watch out: CodeTour will insert the content multiple times if you click the link multiple times!\n\nIn the file margin next to line eight (above to the left), there is a \"discussion\" or \"comment\" icon.\nClicking on the icon will collapse this CodeTour window and allow viewing of the file by itself;\nclicking it when the CodeTour window is closed will restore the window.\n\nMake sure that you save the changes (ctrl+s/cmd+s) to the package.json file before you proceed to the next step, or click here to [save](command:workbench.action.files.save) your work.",
+      "file": "./package.json",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        },
+        "line": 1
+      },
+      "line": 1
+    },
+    {
+      "title": "Install node packages",
+      "description": "The Node Package Manager (npm) is used to install or remove packages using the Node.js repository at https://npmjs.com.\nYou can follow that link to browse the complete repository.\nThe packages to install for this project were defined in the package.json file: typescript, @types/node, and @tsconfig/node20.\n\nTo install the packages, in a terminal window (below) run the following command ($ is the prompt, your terminal/command-line prompt may be different):\n\n```\n$ npm install typescript @types/node @tsconfig/node20 --save-dev\n```\n\nOr click [this link](command:codetour.sendTextToTerminal?[\"npm install typescript @types/node @tsconfig/node20 --save-dev\"]) to have CodeTour run the command for you in the terminal window.\n",
+      "file": "./package.json",
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 1
+        },
+        "end": {
+          "line": 5,
+          "character": 1
+        },
+        "line": 5
+      },
+      "line": 5
+    },
+    {
+      "title": "Add build and run commands",
+      "file": "./package.json",
+      "description": "In the previous step npm installed these packages and placed the configuration under the dev-dependencies attribute,\nbecause these packages support development but are not required when the application is running.\n\nDirectly after the dev-dependencies closing brace (}) add a comma and a \"scripts\" attribute with build and start commands:\n\n```json\n,\n    \"scripts\": {\n        \"build\": \"npx tsc\",\n        \"start\": \"node ./build/scratch.js\"\n    }\n```\n\n[Save](command:workbench.action.file.save) your work.",
+      "selection": {
+        "start": {
+          "line": 9,
+          "character": 6
+        },
+        "end": {
+          "line": 9,
+          "character": 6
+        },
+        "line": 9
+      },
+      "line": 9
+    },
+    {
+      "title": "Create tsconfig.json",
+      "description": "The tsconfig.json file will contain the configuration to compile the typescript files that make up the project.  \n\nUse your preferred method to reate the tsconfig.json file at the top level of the project, or click this link to [have CodeTour create tsconfig.json](command:codetour.sendTextToTerminal?[\"touch tsconfig.json\"]).  \n",
+      "file": "./.resources/.placeholder",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        },
+        "line": 1
+      },
+      "line": 1
+    },
+    {
+      "title": "Configure typescript",
+      "description": "The tsc command referenced in the \"build\" command in package.json (in the second to last step) is the TypeScript compiler.\nThe TypeScript configuration file tsconfig.json controls what files tsc compiles and what options to use.\nThe full specification is [located here](https://www.typescriptlang.org/tsconfig), part of the documentation at [typescriptlang.org](https://typescriptlang.org).  \n\nFiles can extend base configurations, this file will extend a configuration suitable for node.js version 20 and above.\nLook to [tsconfig/bases](https://github.com/tsconfig/bases) at GitHub.com.\n\nIn the following configuration the \"extends\" attribute includes the node.js 20+ configuration.\n\"include\" specifies what files tsc should include in the project compilation.\n\"exclude\" lists what files show not be included in compilation, and the \"compilerOptions\" controls how compilation is performed.  \n\nThe \"esModuleInterop\" compiler option has tsc use helper functions to correctly import CommonJS/AMD/UMD modules when ES6 import syntax is used.  \n\nAdd the configuration to the tsconfig.json file:\n```json\n{\n    \"extends\": \"@tsconfig/node20/tsconfig.json\",\n    \"include\": [ \"src/**/*\" ],\n    \"exclude\": [ \"**/*.spec.ts\" ],\n    \"compilerOptions\": {\n        \"esModuleInterop\": true,\n        \"outDir\": \"build\"\n    }\n}\n```\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./tsconfig.json",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        },
+        "line": 1
+      },
+      "line": 1
+    },
+    {
+      "title": "Create src folder",
+      "description": "In the previous step tsc was instructed to create the output in the \"build\" folder, now it needs to be created.  The project also requires a \"src\" folder to organize the code.\n\nRight click below the files in the Explorer window and at the top-level create a \"src\" folder.\nOr, use the command *mkdir ./src* in a terminal at the command line,\nor use the following automated command link to have CodeTour create the folder: [create ./src folder](command:codetour.sendTextToTerminal?[\"mkdir ./src\"]).",
+      "file": "./.resources/.placeholder",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        },
+        "line": 1
+      },
+      "line": 1
+    },
+    {
+      "title": "Create src/scratch.ts",
+      "description": "src/scratch.ts will contain the first program.\nRight-click the new src folder and create the file, or [have CodeTour create ./src/scratch.ts](command:codetour.sendTextToTerminal?[\"touch ./src/scratch.ts\"]).",
+      "file": "./.resources/.placeholder",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        },
+        "line": 1
+      },
+      "line": 1
+    },
+    {
+      "title": "Display Hello, World!",
+      "description": "import statements are necessary to use modules from packages (library code) in the application.\nThe import statement in this code includes the \"console\" object from the console module, which is used to show output on the terminal with \"console.log()\".\nconsole.log() takes one or more arguments, the arguments are printed out separated by spaces.\nStrings, numbers, and booleans are all acceptable arguments.  \n\nAdd the following code to the scratch.ts file:\n```ts\nimport console from 'console';\n\nconsole.log('Hello, World!');\n```\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        },
+        "line": 1
+      },
+      "line": 5
+    },
+    {
+      "title": "Build the project",
+      "description": "The project must be transpiled (compiled into JavaScript) to run.\nIn the terminal window run \"npm run build\", or click here to [have CodeTour build the project](command:codetour.sendTextToTerminal?[\"npm run build\"]).",
+      "file": "./src/scratch.ts",
+      "line": 3
+    },
+    {
+      "title": "Run the program",
+      "description": "Run the program with \"npm start\", or [have CodeTour run the program](command:codetour.sendTextToTerminal?[\"npm start\"]).",
+      "file": "./src/scratch.ts",
+      "line": 3
+    },
+    {
+      "title": "Stop",
+      "description": "```\n\n\n\n```\n\nCongratulations, you have completed this lab!&nbsp;&nbsp;&nbsp;&nbsp;![stop](./.resources/stop.png)  \n\nWhen it is time to start the next lab click the next tour link below ![below](./.resources/below-optimized.png)",
+      "file": "./src/scratch.ts",
+      "line": 3
+    }
+  ],
+  "isPrimary": true
+}

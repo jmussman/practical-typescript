@@ -1,0 +1,14 @@
+{
+    "name": "scratch-ts",
+    "version": "1.0.0",
+    "license": "none",
+    "devDependencies": {
+        "@tsconfig/node20": "^20.1.2",
+        "@types/node": "^20.11.20",
+        "typescript": "^5.3.3"
+    },
+    "scripts": {
+        "build": "npx tsc",
+        "start": "node build/scratch.js"
+    }
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Lab_03: Conditionals",
+  "nextTour": "Lab_04: Collections and Loops",
+  "steps": [
+    {
+      "title": "Strings, Numbers, and Conditionals",
+      "description": "![TS](./.resources/ts.png)\n\n## Conditionals\n\nFirst things first:\n* Before you begin this lab please [close any open terminal windows](command:workbench.action.terminal.killAll).\n* [Install the Node.js modules](command:codetour.sendTextToTerminal?[\"npm install\"]) for this copy of the lab project.\n\n### About String\n\nAll strings, including quoted literals, have methods to manipulate the content.\nRemember strings are immutable and these methods produce new versions of the string:\n\n|Method|Description|\n|--|--|\n|toLowerCase()|Make a new string with all lower case letters|\n|toLocaleLowerCase()|lower case string in the language specified by the browser locale|\n|toUpperCase()|upper case string|\n|toLocaleUpperCase()|upper case string|\n|startsWith(string)|True if the string start with the provided text|\n|trim()|Removes whitespace from the beginning and end|\n|slice(start, [end])|Extra a substring|\n\nThese and all the methods are defined in the underlying JavaScript language and documentation may be found at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String. \n\n### Number\n\nThe built-in Number object provides methods to work with numbers.\nThere are no integers: all numbers in JavaScript/TypeScript are floating point.\nThese methods can be called directly, Number will be infered:\nTwo that will be important are:\n\n|Method|Description|\n|--|--|\n|parseInt(string)|parses an integer, stops at the first non-digit|\n|parseFloat(string)|parses a float, stops at the first non-digit except .|\n\nThe documentation for Number may be found here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number.\n\n### if\n\nTypeScript follows JavaScript in looking at the \"truth\" of an expression.\ntrue and false are clear.\nAnything that has a value is considered to be true, including non-empty arrays.\nAnything without a value is false, including empty arrays and strings.\n\n```\nlet x: string = '';\n\nif (x) {\n\n    console.log('true!');\n\n} else {\n\n    console.log('false!');\n}\n```\n\n### switch\n\nA switch statement eliminates long runs of if-else statements which are hard to manage.\nThe JavaScript/TypeScript is a bit better than some languages because it allows for strings and floating point numbers:\n\n```\nlet value: number = 99.5;\n\nswitch (value) {\n\n    case 99:\n        console.log(99);\n\n    case 99.5:\n        console.log(99.5);\n        break;\n\n    default:\n        console.log('huh?');\n        break;\n}\n```",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 1
+        },
+        "end": {
+          "line": 7,
+          "character": 1
+        },
+        "line": 7
+      },
+      "line": 7
+    },
+    {
+      "title": "Parse the temperature",
+      "description": "We expect a temperature to have a numeric part and a symbol defining the scale: c or f.\nUse the parseFloat method to retrieve the numeric part of a temperature.\n\n```ts\nlet temperature: string = '21.5c';\nlet celsius: number = parseFloat(temperature);\n\n```\n\n[Save your work](command:workbench.action.files.save), then\n[build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 3,
+          "character": 1
+        },
+        "end": {
+          "line": 4,
+          "character": 1
+        },
+        "line": 4
+      },
+      "line": 4
+    },
+    {
+      "title": "Get the scale",
+      "description": "Change celsius to a more generic name, degrees, and use slice to get the scale.\nSlice works forward and backward; use -1 to grab the last characgter in the string!\n\n```ts\nlet degrees: number = parseFloat(temperature);\nlet scale: string = temperature.slice(-1);\nlet fahrenheit: number = (degrees * (9 / 5)) + 32;\nlet summary: string = `The Celsius value ${degrees} is ${fahrenheit} Fahrenheit`;\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 1
+        },
+        "end": {
+          "line": 7,
+          "character": 1
+        },
+        "line": 7
+      },
+      "line": 7
+    },
+    {
+      "title": "Convert on the scale",
+      "description": "Based on the scale we can convert in either direction.\nUse a switch statement:\n\n```ts\n\nlet summary: string;\n\nswitch (scale) {\ncase 'c':\n    let fahrenheit: number = (degrees * (9 / 5)) + 32;\n    summary = `The Celsius value ${degrees} is ${fahrenheit} Fahrenheit`;\n    break;\n\ncase 'f':\n    let celsius: number = (degrees * (5 / 9)) - 32;\n    summary = `The Fahrenheit value ${degrees} is ${celsius} Celsius`;\n    break;\n\ndefault:\n    summary = 'Huh?';\n    break;\n}\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 6,
+          "character": 1
+        },
+        "end": {
+          "line": 8,
+          "character": 1
+        },
+        "line": 8
+      },
+      "line": 8
+    },
+    {
+      "title": "Check the other path",
+      "description": "Initialize temperature with a Fahrenheit value and check the other path:\n\n```ts\nlet temperature: string = '84.2f';\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 3,
+          "character": 1
+        },
+        "end": {
+          "line": 4,
+          "character": 1
+        },
+        "line": 4
+      },
+      "line": 4
+    },
+    {
+      "title": "Stop",
+      "description": "Congratulations, you have completed this lab!&nbsp;&nbsp;&nbsp;&nbsp;![stop](./.resources/stop.png)  \n\nWhen it is time to start the next lab click the next tour link below ![below](./.resources/below-optimized.png)",
+      "file": "./src/scratch.ts",
+      "line": 99
+    }
+  ]
+}

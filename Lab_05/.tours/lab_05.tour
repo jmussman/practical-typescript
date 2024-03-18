@@ -1,0 +1,91 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Lab_05: Functions",
+  "nextTour": "Lab 6: Objects, Types, and Modules",
+  "steps": [
+    {
+      "title": "Functions",
+      "description": "![TS](./.resources/ts.png)\n\n## Functions\n\nFirst things first:\n* Before you begin this lab please [close any open terminal windows](command:workbench.action.terminal.killAll).\n* [Install the Node.js modules](command:codetour.sendTextToTerminal?[\"npm install\"]) for this copy of the lab project. \n\n### Functions\n\nFunctions serve two purposes in programming: support DRY (don't repeat yourself) and code organization.\nBoth purposes are very important.\n\nTypeScript adds types to the JavaScript function definition.\nBy convention, functions are named using camel-case, they begin with a lower-case letter.\nThe type of each argument follows the declaration, as with any variable.\nThe type of the result of calling the function follows the declaration of the arguments, before the body.\n\nAdd these two function definitions to the end of the program:\n\n```ts\n\nfunction convertCelsiusToFahrenheit(celsius: number): number {\n\n    return (celsius * (9 / 5)) + 32;\n}\n\nfunction convertFahrenheitToCelsius(fahrenheit: number): number {\n\n    return (fahrenheit * (5 / 9)) - 32;\n}\n\n```\n\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 1
+        },
+        "end": {
+          "line": 7,
+          "character": 1
+        },
+        "line": 7
+      },
+      "line": 7
+    },
+    {
+      "title": "Leverage converttCelsiusToFahrenheit",
+      "description": "In the switch delegate the calculation of Fahrenheit to the function:\n\n```ts\n            fahrenheitTemperatures.push(convertCelsiusToFahrenheit(degrees));\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 14,
+          "character": 1
+        },
+        "end": {
+          "line": 15,
+          "character": 1
+        },
+        "line": 15
+      },
+      "line": 15
+    },
+    {
+      "title": "Leverage convertFahrenheitToCelsius",
+      "description": "Delegate the calculation of Celsius to the function:\n\n```ts\n            celsiusTemperatures.push(convertFahrenheitToCelsius(degrees));\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 19,
+          "character": 1
+        },
+        "end": {
+          "line": 20,
+          "character": 1
+        },
+        "line": 20
+      },
+      "line": 20
+    },
+    {
+      "title": "Variable scope",
+      "description": "*let* has been used all along in this program to define variables.\nTypeScript requires a keyword to start a variable declaration.\n\nThere are three different keywords, each with \"scope\":\n* *var* - declare a variable scoped to the current module.\n* *let* - declare a variable scoped to the current code-block. A variable declared in a for, for...in, or for...of statement is bound to the statement.\n* *const* - the same as *let*, but the value cannot be changed after it is assigned. If the value is a reference the referenced object may be changed."
+    },
+    {
+      "title": "Callback functions",
+      "description": "## Callback Functions\n\n### Discussion\n\nThere are many places where a *callback* function is required, a function that will be leveraged by the function it is passed to.\nAn example of this is the *forEach()* method of the array; it requires a function that will be called with each element in turn as the argument.\n\nOften it is not necessary to refer to the function in any other place in the program.\nJavaScript and TypeScript provide for anonymous function declarations, drop the name and the reference to the function may be stored in a variable.\nIn TypeScript the variable is typed with the arguments and return type of the function being defined (note the arrow):\n\n```\nlet processTemperature: (temperature: string) => void = function (temperature: string): void { ... };\n```\n\nOf course a function could simple be declared inline as the argument to another function call:\n\n```\ntemperature.forEach(function (temperature: string): void {\n    ...\n});\n```\n\n### Code\n\nStarting with JavaScript 6 (ES2015) both JavaScript and TypeScript provides a \"fat arrow\" syntax for an anonymous.\nSome languages refer to this as a *lambda function*, in JavaScript and TypeScript it is officially an *arrow function*.\nParathenses argument the arguments to a arrow function are necessary when there are multiple arguments, or the argument types are declared.\n\nReplace the loop with this code that passes an arrow funtion to the forEach method of Array:\n\n```ts\ntemperatureSource.forEach((temperature: string): void => {\n\n    let degrees: number = parseFloat(temperature);\n    let scale: string = temperature.slice(-1);\n\n    switch (scale) {\n        case 'c':\n            fahrenheitTemperatures.push(convertCelsiusToFahrenheit(degrees));\n            celsiusTemperatures.push(degrees);\n            break;\n\n        case 'f':\n            celsiusTemperatures.push(convertFahrenheitToCelsius(degrees));\n            fahrenheitTemperatures.push(degrees);\n\n        default:\n            break;\n    }\n});\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 7,
+          "character": 1
+        },
+        "end": {
+          "line": 26,
+          "character": 1
+        },
+        "line": 26
+      },
+      "line": 26
+    },
+    {
+      "title": "Function Generics",
+      "description": "## Function Generics\n\nConsider this function:\n\n```\nfunction identity(arg: number): number {\n\n    return arg;\n}\n```\n\nThe function is simple, but it may only be called with a number.\nPass in a string, the compiler will reject it.\n\nIn TyepScript the *any* type means that a variable or argument may hold any type, and the type can change during the lifetime of the variable.\nTypeScript allows x to be assigned the string five, even though at first it had a number:\n\n```\nlet x: any = 5;\nx = 'five';\n\nconsole.log(x);\n```\n\nBut *any* should be avoided whenever possible, fundamentally it is side-stepping the type checking that TypeScript is built for\nand raising a flag that the programmer is not being responsible.\nIn this function, there is no guarantee that the returned value will be of the same type as the argument:\n\n```\nfunction identity(arg: any): any {\n\n    return arg;\n}\n```\n\nTo handle this, TypeScript introduces the concept of *generics*, or a placeholder for the type that makes it consistent:\n\n```\nfunction identity<T>(arg: T): T {\n\n    return arg;\n}\n\nlet z: number = identity<number>(1);\n```\n\nif the function is called with a string, it must return a string.\nT is consistent: if the argument is a number, then T is a number in all occurences.\n\n\nAll of this is in case a function is required that performs the same operation against multiple types.\nMore about generics is available at https://www.typescriptlang.org/docs/handbook/2/generics.html\n",
+      "file": "./.resources/.placeholder",
+      "line": 1
+    },
+    {
+      "title": "Stop",
+      "description": "```\n\n\n\n```\n\nCongratulations, you have completed this lab!&nbsp;&nbsp;&nbsp;&nbsp;![stop](./.resources/stop.png)  \n\nWhen it is time to start the next lab click the next tour link below ![below](./.resources/below-optimized.png)",
+      "file": "./src/scratch.ts",
+      "line": 45
+    }
+  ]
+}

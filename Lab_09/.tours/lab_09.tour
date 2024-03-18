@@ -1,0 +1,37 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Lab_09: Web Service",
+  "nextTour": "Lab_10: API Integration",
+  "steps": [
+    {
+      "title": "APIs and REST",
+      "description": "![TS](./.resources/ts.png)\n\n## API Integration\n\nFirst things first:\n* Before you begin this lab please [close any open terminal windows](command:workbench.action.terminal.killAll).\n\n### About APIs and REST\n\nWeb services, aka application programming interfaces (APIs), have evolved to a platform with a very simple interface\nfor making a call to the API and handling the results.\n\nRepresentational State Transfer, REST, was proposed by Roy Fielding in 2000.\nIn the technology of the time, web services were called using SOAP: an XML envelope wrapping another XML data document.\nThe envelope contained the instructions on what operation should be executed, getting or setting data, and the credentials\nof the requesting entity.\n\nRoy Fielding's proposal was to use features of the protocol to define what operation and method should be performed.\nThis completely eliminates the ncessity of having an envelope to carry the information.\nREST does not demand the HyperText Transfer Protocol (HTTP), but most implementations of APIs use it.\n\nIn HTTP:\n* The path defines the operation, usually a \"set\" of data elements, like /customers.\n* The HTTP request method is the method:\n    * GET - retrieve one or more records\n    * PUT - update an existing record\n    * POST - create a new record\n    * DELETE - remove (often archive, but implementation dependent) a record\n* An individual record is identified by placing an id at the end of the path:\n    * /customers returns all records, /customers/4789354 would return one record\n* REST does not define credentials, but modern systems use OAuth2 access tokens in the HTTP header\n* REST does not specify a data format, but JavaScript Object Notation is the most popular form\n\n### JavaScript Object Notation\n\nJSON is fundamentally the same as creating a literal object in JavaScript or TypeScript, with a few more rules.\nIt is very fast to convert from JSON into an object in bost languages.\nGenerating JSON from an object is also very simple.\n\nJSON rules:\n* All property names be quoted.\n* Requires double quotation marks.\n* Cannot assign a function to a property, only basic types and objects.\n* Everything is flattened out, so duplicate references in an object hierarchy become separate copies.\n* Can start with an object {} or an array [].\n\n```\n[\n    {\n        \"id\": \"12345\",\n        \"name\": \"Jane Smith\"\n    },\n    {\n        \"id\": \"54321\",\n        \"name\": \"John Smith\"\n    }\n]\n\n```\n\n",
+      "file": "./.resources/.placeholder",
+      "line": 1
+    },
+    {
+      "title": "server.ts",
+      "description": "## server.ts\n\nThe web service launches from *server.ts*.\n\nFundamentally this is an *express* server application.\nAn application object is created using the *express()* function.\nThat object can be launched with the *listen* method which tells it to wait for requests on a specific network port number.\n\nThe application object may be configured with *use* method calls.\n*use* expects a path to listen for, and a function to call when a request is for that path.\n\nIn this case the path / invokes the mainRouter function.\n\n### CORS\n\nCORS is cross-origin resource sharing.\nThe application is going to be loaded from a different address than the server, the port number is different.\nIf the protocol (HTTP or HTTPS), the server name (localhost), or the port number differs the browser blocks\nthe program from calling another web server.\nEnabling CORS for the target address tells the browser to allow the request, which is why CORS is turn on in this example.\n",
+      "file": "./src/server.ts",
+      "line": 16
+    },
+    {
+      "title": "routers/mainRouter.ts",
+      "description": "## routers/mainRouter.ts\n\nRemember, this router is the landing place for the path /.\nThis module creates a new router object and initialzes sub-routes within in it.\nThe logic for the sub-routes has been separated into controllers/mainController, because\nwhat the endpoints of the service do has nothing to do with routes.\n\nThe router is exposed from the module as the default export.\n",
+      "file": "./src/routers/mainRouter.ts",
+      "line": 11
+    },
+    {
+      "title": "controllers/mainController.ts",
+      "description": "## controllers/mainController.ts\n\nIn this example server the controller itself is the source of data.\nIn the real world of course it would be in a database somehwere.\n\nSo this module defines the data, and then provides the two functions that handle the requests to the endpoints.\nThe functions receive a Request and Response object, and return a Response.\nIn this case, simply the employeeDictionary and the equipmentList as JSON.\n\n### Start the service\n\nThis service needs to be running for the application to talk to it, so kick it off now.\n[Run this command](command:multiCommand.buildAndRunApi) to launch a new terminal in the Lab_09 workspace, build the server, and execute.\nThe name of the window is \"WebService\", make sure it remains open in Lab_10.\n\nThe main service endpoint is at http://localhost:4080 (this will translate through port forwarding to an Internet cloud address).\nThe page there will have the links to the *equipment* and *employees* endpoints;\ntry these links and verify they work.",
+      "file": "./src/controllers/mainController.ts",
+      "line": 30
+    },
+    {
+      "title": "Stop",
+      "description": "Congratulations, you have completed this lab!&nbsp;&nbsp;&nbsp;&nbsp;![stop](./.resources/stop.png)  \n\nImportant: Please leave the terminal window with the running web service open as you move to Lab_10!\n\nWhen it is time to start the next lab click the next tour link below ![below](./.resources/below-optimized.png)",
+      "file": "./src/server.ts",
+      "line": 16
+    }
+  ]
+}

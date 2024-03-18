@@ -1,0 +1,372 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Lab_10: API Integration",
+  "steps": [
+    {
+      "title": "Refactor",
+      "description": "![TS](./.resources/ts.png)\n\n# API Integration\n\nFirst things first:\n* If you launched the web service in Lab_09, leave that terminal window open. If you did not, go back and [complete Lab_09](command:codetour.startTourByTitle?[\"Lab_09: Web Service\"]) before starting Lab_10.\n* [Install the Node.js modules](command:codetour.sendTextToTerminal?[\"npm install\"]) for this copy of the lab project. \n\n## Refactor\n\nRefactor the application to separate getting data from presenting it.\nThe data will need to be held in the main function and then passed as needed into the other functions.\n*getEquipment* needs to have the employees dictionary to populate the equipment records.\n\nStart at the top, and make main a controlling function that will call four functions: getEmployees, getEquipment, showEquipment, and showEmployees.\nAt the same time, we can create thop top of the getEmployees function:\n\n```ts\nfunction main(): void {\n\n    const employees: EmployeeDictionary = getEmployees();\n    const equipment: EquipmentItem[] = getEquipment(employees);\n\n    showEquipment(equipment);\n    showEmployees(employees);\n}\n\nfunction getEmployees(): EmployeeDictionary {\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./src/equipmentManager.ts",
+      "directory": "./Lab_10",
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 1
+        },
+        "end": {
+          "line": 6,
+          "character": 1
+        },
+        "line": 6
+      },
+      "line": 6
+    },
+    {
+      "title": "Refactor part 2",
+      "description": "Finish the getEmployees function by returning the employees, and break the code apart into the next function, replacing the start of the array with:\n\n```ts\n\n    return employees;\n}\n\nfunction getEquipment(employees: EmployeeDictionary): EquipmentItem[] {\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./src/equipmentManager.ts",
+      "directory": "./Lab_10",
+      "selection": {
+        "start": {
+          "line": 21,
+          "character": 1
+        },
+        "end": {
+          "line": 21,
+          "character": 1
+        },
+        "line": 21
+      },
+      "line": 21
+    },
+    {
+      "title": "Refactor part 3",
+      "description": "Finish the getEquipment function by returning the items, and break the code apart into the next function, showEquipment:\n\n```ts\n\n    return equipment;\n}\n\nfunction showEquipment(equipment: EquipmentItem[]): void {\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./src/equipmentManager.ts",
+      "directory": "./Lab_10",
+      "selection": {
+        "start": {
+          "line": 33,
+          "character": 1
+        },
+        "end": {
+          "line": 33,
+          "character": 1
+        },
+        "line": 33
+      },
+      "line": 33
+    },
+    {
+      "title": "Refactor part 4",
+      "description": "Finish the getEmployees function by returning the employees, and break the code apart into the next function, getEquipment:\n\n```ts\n}\n\nfunction showEmployees(employees: EmployeeDictionary): void {\n\n    let content: HTMLElement | null = document.getElementById('content') as HTMLElement;\n    \n```\n\n[Save your work](command:workbench.action.files.save), then build and run with [npm run webpack-dev-server](command:codetour.sendTextToTerminal?[\"npm run webpack-dev-server\"]).\n\nLaunch the server from http://localhost:3080/index.html (this will translate through port forwarding to an Internet cloud address).\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 12,
+          "character": 1
+        },
+        "end": {
+          "line": 12,
+          "character": 1
+        },
+        "line": 12
+      },
+      "line": 12
+    },
+    {
+      "title": "API",
+      "description": "\n![TS](./.resources/ts.png)\n\nFirst things first:\n* Close the browser window.\n* [Shut down the application server](command:workbench.action.terminal.kill)\n\n## Discussion\n\nThis is one of those situations where the implementation is simple, but the explanation is complicated!\n\n### Callback Functions\n\nWeb service calls are asynchronous, the application should not *block* waiting for the web server to respond.\nSo, the obvious solution is to use a callback to handle the response.\nThe problem is when errors occur, so asynchronous methods started to have two callbacks: one for success, and another for error.\nThis how early versions of the popluar JQuery library worked!\n\n### Promises\n\nPromises were developed to standardize this.\nA *promise* is an object returned from a function that will work asynchronously.\nThe promise has two methods: *then* and *catch*.\nThe *then* method is used by the client to register one or more callbacks that expects the data type the promise will resolve to.\nThe *catch* method will register a callback to capture an error if that occurs instead of the resolution.\nIf there is more than one resolve callback, then they are invoked in the order of registration.\n\nOn the side that creates the promise, pass the constructor of the new promise a callback that is used to do the asynchronous work.\nThat callback recieves *resolve* and *reject* arguments: call resolve with the data to pass back, and reject with an error if necessary:\n\n```ts\nfunction getEmployees(): Promise<EmployeeDictionary> {\n\n    return new Promise<EmployeeDictionary>((resolve, reject) => {\n\n        fetch('http://localhost:4080/employees')\n            .then((response: Response) => resolve(response.json()))\n            .catch((err: Error) => reject(err));\n    });\n}\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n\nNotice that the promise requires the actual data type to be returned in angle brackets.\nThe only argument to the constructor is the callback function (in this case a fat-arrow anonymous function)\nthat does the work and invokes the client callbacks for the result.\nThe client callbacks are invoked with *resolve* and *reject*, although in this example the error is being handled locally.\n\nIt is too much effort to specify the type of the callbacks.\nTechnically the definition of the resolve resolves to T, where in this case T is EmployeeDictionary, and the type of the reject is *nullable any*, but\nit really is an *Error*:\n* resolve: (value: T | PromiseLike<T>) => void, which would be resolve: (value: EmployeeDictionary | PromiseLike<EmployeeDictionary>) => void\n* reject: (reason?: any) => void\n\nThe *fetch* method built into the browser is used to make a network request with HTTP, and it too returns a *promise*.\nThe *then* method of the promise is used to register the success callback, the *catch* method is used to register the error callback!\n\nThe whole reason that this function needs to return a promise is that the return will happen *before*\nthe fetch completes and the callbacks for its promise are called!\nThe promise returned to the client allows the client to delay handling the response by putting it in a callback.\n\nOne more shot at clarifying this:\n1. *getEmployees* is called by the client, and returns a new Promise of the appropriate data type.\n2. The callback function given to the promise constructor is used to do the work.\n3. In this case, the work is to call *fetch*, so *getEmployees* is the client of fetch.\n4. The promise returned by fetch is used to register a callback to get the HTTP response.\n5. When the callback gets the HTTP response, it uses *response.json* to parse it and invoke the callback to the client of this function.\n6. The callback registered by the client will get the typed data.",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 14,
+          "character": 1
+        },
+        "end": {
+          "line": 24,
+          "character": 1
+        },
+        "line": 24
+      },
+      "line": 24
+    },
+    {
+      "title": "API part 2",
+      "description": "Do the same thing for *getEqupment*, changing the type and the URL:\n\n```ts\nfunction getEquipment(): Promise<EquipmentItem[]> {\n\n    return new Promise<EquipmentItem[]>((resolve, reject) => {\n\n        fetch('http://localhost:4080/equipment')\n            .then((response: Response) => resolve(response.json()))\n            .catch((err: Error) => reject(err));\n    });\n}\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 24,
+          "character": 1
+        },
+        "end": {
+          "line": 35,
+          "character": 1
+        },
+        "line": 35
+      },
+      "line": 35
+    },
+    {
+      "title": "API part 3",
+      "description": "\nMain needs to be fixed to register callback functions with the promises returned by the get methods.\nAnd, the show methods need be be called when the corresponding promise resolves, not before it resolves.\nSo, the show methods must go in the callbacks, and the catches here at the top (in main) log to the console:\n\n```ts\nfunction main(): void {\n\n    getEquipment()\n        .then((equipment: EquipmentItem[]) => showEquipment(equipment))\n        .catch((err: Error) => console.log(err));\n\n    getEmployees()\n        .then((employees: EmployeeDictionary) => showEmployees(employees))\n        .catch((err: Error) => console.log(err));\n}\n\n```\n\n[Save your work](command:workbench.action.files.save), then build and run with [npm run webpack-dev-server](command:codetour.sendTextToTerminal?[\"npm run webpack-dev-server\"]).\n\nLaunch the server from http://localhost:3080/index.html (this will translate through port forwarding to an Internet cloud address).\n\n\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 1
+        },
+        "end": {
+          "line": 13,
+          "character": 1
+        },
+        "line": 13
+      },
+      "line": 13
+    },
+    {
+      "title": "Async/await part 1",
+      "description": "## Async and await\n\nNote: this time around the changes are not major.\nWebpack-dev-server will recompile the TypeScript, bundle it, and redeploy to the browser on each file save.\nThe page in the browser will refresh.\n\n### async\n\n*async* is a keyword that tells TypeScript a function is going to wait for asynchronous promises to finish and itself\nreturn a promise.\n\n### await\n\n*await* is the keyword used to tell TypeScript the function being called returns a promise.\nWhile the code may look like a normal assignment from a function call, the *await* keyword causes\nTypeScript to set up callbacks for the sucess and error sides of the promise behind the scenes.\n\nSo, async and await are still calls using promises, just cleaner looking code because TypeScript handles the work.",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 7,
+          "character": 1
+        },
+        "end": {
+          "line": 15,
+          "character": 1
+        },
+        "line": 15
+      },
+      "line": 15
+    },
+    {
+      "title": "Async/await part 2",
+      "description": "In getEmployees instead of handling the promise for each fetch call directly, preface it with *await*.\nWatch out for response.json(), that call also returns a promise and requires the use of *await*.\n*await* may only be used in an asynchronous function which returns a promise, which getEmployees already is.\nSimply add the *async* keyword to the function declaration.\n\n```ts\nasync function getEmployees(): Promise<EmployeeDictionary> {\n\n    const response: Response = await fetch('http://localhost:4080/employees');\n\n    return await response.json();\n}\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n\nWebpack-dev-server will compile the changes, update the bundle, and refresh the page in the browser.\nCheck the terminal window to make sure the compilation happened,\nand the browser window to see that both the equipment list and employees are shown.\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 14,
+          "character": 1
+        },
+        "end": {
+          "line": 24,
+          "character": 1
+        },
+        "line": 24
+      },
+      "line": 24
+    },
+    {
+      "title": "Async/await part 3",
+      "description": "Change getEquipment to do similar async/await logic.\nThe extra response variable is eliminated in this example:\n\n```ts\nasync function getEquipment(): Promise<EquipmentItem[]> {\n\n    return await (await fetch('http://localhost:4080/equipment')).json();\n}\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n\nCheck the terminal window for compilation, and the browser window to see that the equipment list and employees are still showing.\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 21,
+          "character": 1
+        },
+        "end": {
+          "line": 32,
+          "character": 1
+        },
+        "lines": 32
+      },
+      "line": 32
+    },
+    {
+      "title": "Async/await part 4",
+      "description": "What happens if there is an error in the fetch operation?\nChange the http call in getEmployees to https:\n\n```ts\n    let response: Response = await fetch('https://localhost:4080/employees');\n    \n```\n\nThe server does not support an https connection, so this will fail.\n\n[Save your work.](command:workbench.action.files.save)\n\nThe browser should still show the equipment list, but the fetch for employees fails (https is not supported).\nThe error message will be displayed on the browser console.\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 18,
+          "character": 1
+        },
+        "end": {
+          "line": 19,
+          "character": 1
+        },
+        "line": 19
+      },
+      "line": 19
+    },
+    {
+      "title": "Async/await part 5",
+      "description": "Change the https call in getEmployees back to https:\n\n```ts\n    let response: Response = await fetch('http://localhost:4080/employees');\n    \n```\n\nThe server does not support an https connection, so this will fail.\n\n[Save your work.](command:workbench.action.files.save)\n\nThe browser should still show the employee list once again, the http fetch of employees is successful.\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 18,
+          "character": 1
+        },
+        "end": {
+          "line": 19,
+          "character": 1
+        },
+        "line": 19
+      },
+      "line": 19
+    },
+    {
+      "title": "Async/await part 6",
+      "description": "Main is not as clean as it could be handling the promises.\nThere are be two error handlers, one for each promise, and that is repeated code.\n\nasync/await transforms the promise errors into exceptions.\nThe code that may raise an error is placed in a try-block, the code handling the error in the catch-block.\nIn this case the show functions are also placed in the try block because if there is a failure to get the\ndata, the show functions cannot be called.\nNote that this will produce slightly different results than using the promises, because the failure of either fectch will stop anything from being displayed.\n\nOnly one catch-block is necessary for both get functions which can raise the error.\nOf course now main must be declared as async because await is used, and the return type becomes a Promise of type void:\n\n```ts\nasync function main(): Promise<void> {\n\n    try {\n\n        const equipment: EquipmentItem[] = await getEquipment();\n        const employees: EmployeeDictionary = await getEmployees();\n\n        showEquipment(equipment);\n        showEmployees(employees);\n    }\n\n    catch (err) {\n\n        console.log(err);\n    }\n}\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n\nCheck the browser window, nothing should have appeared to change.\n\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 1
+        },
+        "end": {
+          "line": 15,
+          "character": 1
+        },
+        "line": 15
+      },
+      "line": 15
+    },
+    {
+      "title": "Async/await part 7",
+      "description": "Change the fetch call to https to create the error again:\n\n```ts\n    const response: Response = await fetch('https://localhost:4080/employees');\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n\nThis time nothng is displayed in the browser window, because the catch circumvented the calls to both showEquipement and showEmployees.",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 24,
+          "character": 1
+        },
+        "end": {
+          "line": 25,
+          "character": 1
+        },
+        "line": 25
+      },
+      "line": 25
+    },
+    {
+      "title": "Async/await part 7",
+      "description": "Change the fetch call back to http:\n\n```ts\n    const response: Response = await fetch('http://localhost:4080/employees');\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n\nThe reload will show both equipment and employees since no errors occurred.\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 24,
+          "character": 1
+        },
+        "end": {
+          "line": 25,
+          "character": 1
+        },
+        "line": 25
+      },
+      "line": 25
+    },
+    {
+      "title": "Enumerations",
+      "description": "## Enumerations\n\n### Discussion\n\nEnumerations are a set of keywords; a variable of the enumerated type can only be assigned from the set.\nThe really good thing about enumerations is the program cannot step out of bounds by assigning an inappropriate value.\nThe problem with enumerations is keeping the set lined up with the data source.\n\n### Numeric Enum\n\nMany languages, all the way back to Pascal, provide numeric enumerated types.\nJavaScript does not.\n\nInsert the enumerated type in front of line 1:\n\n```ts\nenum EmployeeType {\n    Salary = 1,\n    Hourly = 2\n}\n\n\n```\n\nMost of the time the type has to line up with the values used in records by the data source to mean the same thing.\n\n[Save your work.](command:workbench.action.files.save)\n\n\n\n",
+      "file": "./src/models/Employee.ts",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 1,
+          "character": 1
+        },
+        "line": 6
+      },
+      "line": 6
+    },
+    {
+      "title": "Enumerations part 2",
+      "description": "Add the new property to the Employee type:\n\n```ts\n,\n    employeeType: EmployeeType\n```\n\nMost of the time the type has to line up with the values used in records by the data source to mean the same thing.\n\n[Save your work.](command:workbench.action.files.save)\n\n\n\n",
+      "file": "./src/models/Employee.ts",
+      "selection": {
+        "start": {
+          "line": 8,
+          "character": 1
+        },
+        "end": {
+          "line": 10,
+          "character": 1
+        },
+        "line": 10
+      },
+      "line": 10
+    },
+    {
+      "title": "Enumerations part 3",
+      "description": "Many languages, all the way back to Pascal, provide numeric enumerated types.\nJavaScript does not.\n\nInsert the enumerated type in front of line 1:\n\n```ts\n\nexport { EmployeeType };\n\n```\n\nMost of the time the type has to line up with the values used in records by the data source to mean the same thing.\n\n[Save your work.](command:workbench.action.files.save)\n\n\n\n",
+      "file": "./src/models/Employee.ts",
+      "selection": {
+        "start": {
+          "line": 12,
+          "character": 1
+        },
+        "end": {
+          "line": 12,
+          "character": 1
+        },
+        "line": 12
+      },
+      "line": 12
+    },
+    {
+      "title": "Enumerations part 4",
+      "description": "Change the fetch call back to http:\n\n```ts\n        const summary: string = `${id}: ${employees[id].name}, employeeType: ${employees[id].employeeType}`;\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n\nThe reload will show the employee type, but it shows the value (not the keyword).\nThe keyword is only useful for constraining assignment or passing an argument to a value from the set.\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 58,
+          "character": 1
+        },
+        "end": {
+          "line": 59,
+          "character": 1
+        },
+        "line": 59
+      },
+      "line": 59
+    },
+    {
+      "title": "Enumerations part 5",
+      "description": "### String Enumeration\n\nAs storage costs have decreased and procssing power has increased, many data sources have moved to using\nstring values for data like employee type.\nThe problem that they face is ensuring that the correct values are actually inserted into records.\nOn the web service side these constraints can be ensured by the API endpoints.\n\nOf course, if the data submitted is bad then the update is not going to happen.\nThis is where an enumerated type comes in, ensuring that the data is part of the allowed set.\n\nTypeScript has a string enumeration, where the keyword maps to a string value.\nWhile the string is part of the set the data source allows,\nthe keyword ensures that the application does not insert an incorrect value:\n\n```ts\n    Salary = 'salary',\n    Hourly = 'hourly'\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n\n",
+      "file": "./src/models/Employee.ts",
+      "selection": {
+        "start": {
+          "line": 2,
+          "character": 1
+        },
+        "end": {
+          "line": 4,
+          "character": 1
+        },
+        "line": 4
+      },
+      "line": 4
+    },
+    {
+      "title": "Enumerations part 6",
+      "description": "Change the equipmentManager to fetch the employeesB list, which provides strings instead of numbers:\n\n```ts\n    const response: Response = await fetch('http://localhost:4080/employeesB');\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n\nThe employee list is now coming through with string values for the employee type instead of numbers.",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 24,
+          "character": 1
+        },
+        "end": {
+          "line": 25,
+          "character": 1
+        },
+        "line": 25
+      },
+      "line": 25
+    },
+    {
+      "title": "Stop",
+      "description": "```\n\n\n\n```\n\nCongratulations, you have completed this lab and the whole course!&nbsp;&nbsp;&nbsp;&nbsp;![stop](./.resources/stop.png)\n\nClick here [to close the terminal windows and terminate the web service and the application](command:workbench.action.terminal.killAll).\n  \nClick the \"Finish Tour\" button below to close this window ![below](./.resources/below-optimized.png)",
+      "file": "./src/equipmentManager.ts",
+      "line": 72
+    }
+  ]
+}

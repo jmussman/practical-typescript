@@ -1,0 +1,98 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Lab_04: Collections and Loops",
+  "nextTour": "Lab_05: Functions",
+  "steps": [
+    {
+      "title": "Collections",
+      "description": "![TS](./.resources/ts.png)\n\n## Collections\n\nFirst things first:\n* Before you begin this lab please [close any open terminal windows](command:workbench.action.terminal.killAll).\n* [Install the Node.js modules](command:codetour.sendTextToTerminal?[\"npm install\"]) for this copy of the lab project. \n\n### Discussion\n\nJavaScript and TypeScript only have arrays to provide a collection; in TypeScript the elements can be typed.\nArrays have a length property that returns how many elements are in the array.\n\n```\nlet celsius: number[] = [];\nlet fahrenheit: number[] = [];\n\nlet temperatures: string[] = [ '21.5c', '80.2f' ];\n\nif (temperatures.length == 2) {\n\n    console.log('temperature has two elements');\n}\n```\n\nArrays are dynamic.\nThe Array class behind arrays provides methods to manipulate arrays in a manner similar to collections in other languages.\n\n|Method|Description|\n|--|--|\n|includes(value)|true if the array contains the value|\n|indexOf(value)|The index of a value in the array, if it is present (-1 otherwise)|\n|isArray()|true if the object is an array|\n|join(array)|Produces a new union of the two arrays|\n|startsWith(string)|True if the string start with the provided text|\n|pop()|Removes and returns the last element of the array|\n|push(value)|Add the value to the end of the array|\n|shift()|Removes and returns the first element of the array|\n|unshift(value)|Pushes a new value onto the beginning of the array|\n|slice(start, end)|Returns a sub-list of the array, works like slice in String|\n|splice(start, count, values...)|Replaces from start to end with new values; use a zero count to insert|\n\nThe full documentation for arrays is at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice.\n\n### Code \n\nInsert the the an a array of temperatures into the scratch.ts file above the current variables at line three:\n\n```ts\nlet temperatureSource: string[] = [ '21.5c', '80.2f', '', '17.0c', '19.7c', '76.3f' ];\n\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 1
+        },
+        "end": {
+          "line": 7,
+          "character": 1
+        },
+        "line": 7
+      },
+      "line": 7
+    },
+    {
+      "title": "Loops part 1",
+      "description": "## Loops\n\n### Discussion\n\nTypeScript provides while, do-while, and for loops with expected break and continue statements.\n\n```\nlet values: number[] = [ 5, 4, 3, 2, 1];\nlet i: number = 0;\n\nwhile (i < values.length) {\n\n    console.log(values[i]);\n    ++i;\n}\n\ndo {\n\n    console.log(values[i]);\n    ++i;\n\n} while (i < values.lnegth);\n\nfor (i = 0; i < values.length; ++i) {\n\n    console.log(values[i]);\n}\n```\n\n### Code\n\nWrap the calculating code with a loop that walks through the array.\nAdjust the degrees and scale to read from the array:\n\n```ts\nfor (let i = 0; i < temperatureSource.length; ++i) {\n\n    let degrees: number = parseFloat(temperatureSource[i]);\n    let scale: string = temperatureSource[i].slice(-1);\n\n    let summary: string;\n\n    switch (scale) {\n        case 'c':\n            let fahrenheit: number = (degrees * (9 / 5)) + 32;\n            summary = `The Celsius value ${degrees} is ${fahrenheit} Fahrenheit`;\n            break;\n\n        case 'f':\n            let celsius: number = (degrees * (5 / 9)) - 32;\n            summary = `The Fahrenheit value ${degrees} is ${celsius} Celsius`;\n            break;\n\n        default:\n            summary = 'Huh?';\n            break;\n    }\n\n    console.log(summary);\n}\n\n```\n\nPay attention to the bad data in the array inserted in the last step.\nThe JavaScript engine is lenient: '' does not cause a problem, even though slice(-1) does not reference a character.\nThe only issue is that scale is not 'c' or 'f', so it lands on the default case!\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 1
+        },
+        "end": {
+          "line": 28,
+          "character": 1
+        },
+        "line": 28
+      },
+      "line": 28
+    },
+    {
+      "title": "Loops part 2",
+      "description": "This time around push the calculated values onto parallel celsiusTemperatures and fahrenheitTemperature arrays in each iteration.\nSkip the bad value.\nAt the end add another loop to print out the conversions:\n\n```ts\nlet celsiusTemperatures: number[] = [];\nlet fahrenheitTemperatures: number[] = [];\n\nfor (let i: number = 0; i < temperatureSource.length; ++i) {\n\n    let degrees: number = parseFloat(temperatureSource[i]);\n    let scale: string = temperatureSource[i].slice(-1);\n\n    switch (scale) {\n        case 'c':\n            fahrenheitTemperatures.push((degrees * (9 / 5)) + 32);\n            celsiusTemperatures.push(degrees);\n            break;\n\n        case 'f':\n            celsiusTemperatures.push((degrees * (5 / 9)) - 32);\n            fahrenheitTemperatures.push(degrees);\n\n        default:\n            break;\n    }\n}\n\nlet summary: string;\n\nfor (let i = 0; i < celsiusTemperatures.length; ++i) {\n\n    summary = `The Celsius value ${celsiusTemperatures[i]} is ${fahrenheitTemperatures[i]} Fahrenheit`;\n    console.log(summary);\n}\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 1
+        },
+        "end": {
+          "line": 30,
+          "character": 1
+        },
+        "line": 30
+      },
+      "line": 30
+    },
+    {
+      "title": "Presentation (and rounding)",
+      "description": "So that presentation was a little off because of the long fractional (decimal) parts.\nThe easy way to fix this is the use the *Number.toFixed(precision)* method, which will round as necessary:\n\n```ts\n    summary = `The Celsius value ${celsiusTemperatures[i].toFixed(2)} is ${fahrenheitTemperatures[i].toFixed(2)} Fahrenheit`;\n\n```\n\nThe method call is included in the template string because it is providing formatting, not calculation.\nThat seems to fit with the responsibility of producing the output.\nYou could also do a search at https://npmjs.com for formatting packages with more features, there are plenty of them out there!\n\nWarning for financial folks: JavaScript and TypeScript do NOT implement the finer points of rounding, anything that\nends in 5 is rounded up.\nWhen 5 is always rounded up, it leads to a problem with averaging, because rounding up happens 5/9ths of the time and rounding down only 4/9ths of the time.\nSo the concensus is the precise way to round is to look at the digit *before* the 5; if it is even then 5 should round down, not up.\nZero is considered to be even.\nUnfortunately, JavaScript and TypeScript do not know this.\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 31,
+          "character": 1
+        },
+        "end": {
+          "line": 32,
+          "character": 1
+        },
+        "line": 32
+      },
+      "line": 32
+    },
+    {
+      "title": "for...of",
+      "description": "If the index is not required in a loop, then a faster way to step through each element is to use the for...of syntax.\nThis loop uses a local variable to walk through each element in turn, taking on the value of that element.\nIt is faster than an index because JavaScript just moves to the adjacent element in each iteration; with an index\nit must find the element at that position each time, which means starting at the front every time.\n\nThe variable type is not declared, that is inferred from the type of the array.\nFix the first three lines of the loop, that is sufficient to change it to a for...of:\n\n```ts\nfor (let temperature of temperatureSource) {\n\n    let degrees: number = parseFloat(temperature);\n    let scale: string = temperature.slice(-1);\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n\n",
+      "file": "./src/scratch.ts",
+      "selection": {
+        "start": {
+          "line": 7,
+          "character": 1
+        },
+        "end": {
+          "line": 11,
+          "character": 1
+        },
+        "line": 11
+      },
+      "line": 11
+    },
+    {
+      "title": "Stop",
+      "description": "```\n\n\n\n```\n\nCongratulations, you have completed this lab!&nbsp;&nbsp;&nbsp;&nbsp;![stop](./.resources/stop.png)  \n\nWhen it is time to start the next lab click the next tour link below ![below](./.resources/below-optimized.png)",
+      "file": "./src/scratch.ts",
+      "line": 33
+    }
+  ]
+}

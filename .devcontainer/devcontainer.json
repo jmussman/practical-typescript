@@ -1,0 +1,25 @@
+{
+    "name": "Practicat TypeScript",
+    "image": "mcr.microsoft.com/devcontainers/typescript-node",
+    "forwardPorts": [
+        3080,
+        4080
+    ],
+    "portsAttributes": {
+        "3080": {
+            "label": "app-preview"
+        },
+        "4080": {
+            "label": "web-service-preview"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ryuta46.multi-command",
+                "vsls-contrib.codetour",
+                "gabrielgrinberg.auto-run-command"
+            ]
+        }
+    }
+}

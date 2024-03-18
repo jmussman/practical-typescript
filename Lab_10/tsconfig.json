@@ -1,0 +1,22 @@
+{
+    "extends": "@tsconfig/node20/tsconfig.json",
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "**/*.spec.ts"
+    ],
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "outDir": "build",
+        "lib": [
+            "DOM"
+        ]
+    },
+    "ts-node": {
+        "compilerOptions": {
+            "module": "CommonJS"
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Launch the Practical TypeScript Workspace",
+  "steps": [
+    {
+      "title": "Launch",
+      "description": "![TS](./.resources/ns-logo.png)  \n\n# Practical TypeScript\n\nIf you are seeing this message the project folder has been opened without going into Visual Studio Code Workspaces.\n\nTo reopen this in workspaces, [click on this command link](command:workbench.action.openWorkspace) and open the file \"practial-typescript.code-workspace\".",
+      "file": "./.placeholder",
+      "line": 1
+    }
+  ],
+  "isPrimary": true
+}

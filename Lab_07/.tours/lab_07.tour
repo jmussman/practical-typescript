@@ -1,0 +1,64 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Lab_07: Interfaces and Classes",
+  "nextTour": "Lab_08: Document Object Model",
+  "steps": [
+    {
+      "title": "Interfaces",
+      "description": "![TS](./.resources/ts.png)\n\n## Interfaces and Classes\n\nFirst things first:\n* Before you begin this lab please [close any open terminal windows](command:workbench.action.terminal.killAll).\n* [Install the Node.js modules](command:codetour.sendTextToTerminal?[\"npm install\"]) for this copy of the lab project. \n\n### Discussion\n\nInterfaces are very similar to the type delcarations in the previous module, but there are some differences between them.\nTypes can be used to alias existing types, and indicate a union where one of a set of types may appear:\n\n```\ntype Address = string;\ntype Worker = Employee;\ntype NUEmployee = Employee | null | undefined;\n\n```\n\nWhen working with callback functions, type declarations can make those strongly typed as well.\nAnything using this callback expects a function that takes two strings and returns an Employee:\n\n```\ntype CallbackFn = (string: id, string: name) => Employee;\n\n```\n\nInterfaces are a little closer to class declarations, and may be implemented by classes.\nInterfaces cannot define a union, but they can be built from partial declarations:\n\n```\ninterface Employee {\n    \n    id: string\n}\n\ninterface Employee {\n\n    name: string\n}\n\nlet jane: Employee = { id: '12345', name: 'Jane Smith' };\n\n```\n\n### Code\n\nIt is very simple to redefine the Employee module to export an interface instead of a Type, everything\nwould still work the same:\n\n```ts\ninterface Employee {\n    \n    id: string,\n    name: string\n}\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n",
+      "file": "./src/models/Employee.ts",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 6,
+          "character": 1
+        },
+        "line": 6
+      },
+      "line": 6
+    },
+    {
+      "title": "Classes part 1",
+      "description": "### Separation of Concerns\n\nTo be clear, modern applications on both the server and client side mostly ignore using classes.\nIn traditional object-oriented programming classes modeled data and the processes that use them,\nlike an automobile with an engine and a start method.\n\nIn modern applications the architecture has separated the business rules from the user interface.\nOn the server side interfaces are often used to define the structure of the data coming from persistent storage.\nThe service it self, often based on the *Express* framework, will use functional programming for the business\nrules to manipulate and deliver the data.\n\nThe modern frames for buidling single-page applications in the browser, Angular, React, Vue, etc.,\nall use function programming structure to process user actions and interact with the backend service.\n\nThe classes below certainly complicate the application.\nIf you want to ignore classes completely, then simply proceed to the next lab in module 8, everything will still work.\n\n### Classes\n\nFull support for classes was introduced to JavaScript by ES2015, of course TypeScript adds more constraints to them.\nTypeScript allows members to have and honors modifying declarations,like public and private.\nIn a vein similar to C#, TypeScript also provides property getter and setter methods so constraints may be applied to private data.\n\n```ts\nclass Employee {\n\n    private _id: string | null = null;\n    private _name: string | null = null;\n\n    public constructor(id: string | null = null, name: string | null = null) {\n\n        this.id = id;\n        this.name = name;\n    }\n\n    public get id() { return this._id; }\n    public set id(value: string | null) { this._id = value; }\n    public get name() { return this._name; }\n    public set name(value: string | null) { this._name = value; }\n}\n\n```\n\nNote a couple of things in this example:\n* TypeScript has public and private member of a class.\n* The keyword this must *always* be used when referencing instance variables.\n* The get method does not require a type, it is inferred from the variable. It creates a \"property\" that can be used in an expression.\n* The set method creates a writeable property that can be assigned to; the argument is the right-hand side of the assignment.\n* Because TypeScript uses lowercase property names the variable names must be different; in this case fall back to using _ in front of private data.\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./src/models/Employee.ts",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 6,
+          "character": 1
+        },
+        "line": 6
+      },
+      "line": 6
+    },
+    {
+      "title": "Classes part 2",
+      "description": "The initialization of data using classes differs too.\nNote the use of the new operator and the initializers referencing the property names (not the private members):\n\n```ts\n    '12345': new Employee('12345', 'Jane Smith'),\n    '54321': new Employee('54321', 'John Smith')\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 6,
+          "character": 1
+        },
+        "end": {
+          "line": 8,
+          "character": 1
+        },
+        "line": 8
+      },
+      "line": 8
+    },
+    {
+      "title": "Stop",
+      "description": "```\n\n\n\n```\n\nCongratulations, you have completed this lab!&nbsp;&nbsp;&nbsp;&nbsp;![stop](./.resources/stop.png)  \n\nWhen it is time to start the next lab click the next tour link below ![below](./.resources/below-optimized.png)",
+      "file": "./src/equipmentManager.ts",
+      "line": 99
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+    "folders": [
+        {
+            "path": "Lab_01"
+        },
+        {
+            "path": "Lab_02"
+        },
+        {
+            "path": "Lab_03"
+        },
+        {
+            "path": "Lab_04"
+        },
+        {
+            "path": "Lab_05"
+        },
+        {
+            "path": "Lab_06"
+        },
+        {
+            "path": "Lab_07"
+        },
+        {
+            "path": "Lab_08"
+        },
+        {
+            "path": "Lab_09"
+        },
+        {
+            "path": "Lab_10"
+        }
+    ],
+    "settings": {
+        "multiCommand.commands": [
+            {
+                "command": "multiCommand.buildAndRunApi",
+                "sequence": [
+                    "workbench.action.terminal.newInActiveWorkspace",
+                    "workbench.action.terminal.focus",
+                    {
+                        "command": "workbench.action.terminal.renameWithArg",
+                        "args": { "name": "WebService" }
+                    },
+                    {
+                        "command": "workbench.action.terminal.sendSequence",
+                        "args": { "text": "npm install; npm run build-server; npm run start-server\n" }
+                    }
+                ]
+            }
+        ],
+        "auto-run-command.rules": [
+            {
+                "command": "codetour.startTour"
+            }
+        ]
+    }
+}

@@ -1,0 +1,147 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Lab_06: Ojbects, Types, and Modules",
+  "nextTour": "Lab_07: Interfaces and Classes",
+  "steps": [
+    {
+      "title": "Objects",
+      "description": "![TS](./.resources/ts.png)\n\n## Objects, Types, and Modules\n\nFirst things first:\n* Before you begin this lab please [close any open terminal windows](command:workbench.action.terminal.killAll).\n* [Install the Node.js modules](command:codetour.sendTextToTerminal?[\"npm install\"]) for this copy of the lab project. \n\n### Object Literals\n\nJavaScript allows literal objects to be created on the fly, but it is not typed:\n\n```\njane = {\n    id: '1234',\n    name: 'Jane Smith'\n};\n```\n\nTypeScript has issues with this, because of the type constraints.\nAn anonymous type can be defined at the same time, but it is a bit clunky:\n\n```\nlet obj: { id: string, name: string } = {\n    id: '1234',\n    name: 'Jane Smith'\n}\n```\n\nIn JavaScript nothing stops the code from requesting a property by name, but if the property is not there bad things can happen:\nif the property is a value, the result is undefined.\nIf the property is method and does not exist, the program will crash when undefined is called.\n\nTypeScript always knows the underlying type definition, the code can only refer to what is known to exist or the compiler complains.",
+      "file": "./.resources/.placeholder",
+      "line": 1
+    },
+    {
+      "title": "Type",
+      "description": "### Type\n\nTypeScript introduces named *types*, which are a common way to ensure that a group of objects all follow the same rules.\nOr rather, they all have the same properties:\n\n```\ntype Employee = {\n\n    private id: string;\n    private name: string;\n}\n\nlet jane: Employee = { id: '1234', name: 'Jane Smith' };\n```\n",
+      "file": "./.resources/.placeholder",
+      "line": 1
+    },
+    {
+      "title": "Models part 1",
+      "description": "### Model\n\nModels are the formal name of object instances that hold the state of the application.\nThis new application will be an equipment manager that displays equipment items and which employee is responsible for each item.\n\nStart off by creating the source structure this way:\n\n```\nsrc/\n    equipmentManager.ts\n    Models/\n        Employee.ts\n        EquipmentItem.ts\n```\n\nClick [here to have Codspaces create the folders and files for you](command:codetour.sendTextToTerminal?[\"mkdir ./src/models; touch ./src/models/Employee.ts ./src/models/EquipmentItem.ts ./src/equipmentManager.ts\"]).",
+      "file": "./.resources/.placeholder",
+      "line": 1
+    },
+    {
+      "title": "Models part 2",
+      "description": "### Discussion\n\nThe files need to be structured as modules and imported into other code files in the application.\nModules are created by exporting components; typically one item but ocassionally related items like an *enumerated type*.\n\nExports can happen at the declaration of the item:\n\n```\nexport default type Employee = {\n\n    id: string,\n    name: string\n}\n```\n\n### Code\n\nExporting on declaration requires scanning the file looking for exports, which can be missed as the module gets more complicated.\nA more formal way is to declare all the exports at the bottom of the file, add this code to the Employee.js file:\n\n```ts\ntype Employee = {\n    \n    id: string,\n    name: string\n}\n\nexport default Employee;\n```\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./src/models/Employee.ts",
+      "line": 7
+    },
+    {
+      "title": "Models part 3",
+      "description": "Each EquipmentItem will be the responsibility of a particular Employee.\nThe module needs to import Employee to use in the definition of the type:\n\n```ts\nimport Employee from '../models/Employee';\n\ntype EquipmentItem = {\n    \n    id: string,\n    description: string,\n    employee: Employee\n}\n\nexport default EquipmentItem;\nexport { Employee };\n```\n\nAdditional exports are named exports in an array, and must be referred to by name in the client code.\nImports can be re-exported by another module, which offers another way to get at a related type in the client code.\nThis is a demonstration, in a project both types woud normally be imported separately in the client code.\n\nNote the \"wierd\" import here:\n* First, don't use file extensions, TypeScript will figure it out.\n* Second, ./Employee would work, but adding the full relative path clarifies to the reader this is another model file.\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./src/models/EquipmentItem.ts",
+      "line": 12
+    },
+    {
+      "title": "Consume the types",
+      "description": "## Consume the type\n\nSo now use the two model types in the application scratch.\nWe are going to take care of a few points in this code:\n* We will import Employee from EquipmentItem just to show importing multiple things.\n* Arrays will be built from new object instances and literals just to show both ways.\n* Replace the whole program (except the import of console) with:\n\n```ts\nimport console from 'console';\nimport EquipmentItem, { Employee } from './models/EquipmentItem';\n\nconst employees: Employee[] = [\n\n    { id: '12345', name: 'Jane Smith' },\n    { id: '54321', name: 'John Smith' }\n];\n\nconst equipment: EquipmentItem[] = [\n\n    { id: 'C001', description: 'laptop computer', employee: employees[0] },\n    { id: 'C002', description: 'laptop computer', employee: employees[1] },\n    { id: 'A099', description: 'company automobile', employee: employees[0] }\n];\n\nfor (let item of equipment) {\n\n    const summary: string = `${item.id}: ${item.description} assigned to ${item.employee.name}`;\n    \n    console.log(summary);\n}\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n\n",
+      "file": "./src/equipmentManager.ts",
+      "line": 43
+    },
+    {
+      "title": "Dictionary part 1",
+      "description": "### Dictionaries\n\nThis is an object where each element is inserted using a unique key, which is a unique property name in the object.\nUsing the property names as a subscript makes it extremely fast to find a particular member by the key, instead of having to walk through an entire array.\nThe dictionary is typed: TypeScript knows what the key and object types are supposed to be.\n\nChange the employees to be a typed dictionary, and the equipment list to reference employees by id:\n\n```ts\nconst employees: { [id: string]: Employee } = {\n\n    '12345': { id: '12345', name: 'Jane Smith' },\n    '54321': { id: '54321', name: 'John Smith' }\n};\n\nconst equipment: EquipmentItem[] = [\n\n    { id: 'C001', description: 'laptop computer', employee: employees['12345'] },\n    { id: 'C002', description: 'laptop computer', employee: employees['54321'] },\n    { id: 'A099', description: 'company automobile', employee: employees['12345'] }\n];\n\n```\n\nNote: the id was left as a property of the employee object too.\nThat seems redundant, but this would be typical in a real application.\nKeeping the id carries extra information in the object, but the id will come\nin as part of the data for an employee, it is more work to strip it out,\nand keeping it in the object makes it available from any reference to an employee object.\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n\nThat dictionary is kind of ugly and must eventually be repeated in other places.\nCreate a new file ./src/models/EmployeeDictionary.ts for the type definition, or [have codetour create it for you](command:codetour.sendTextToTerminal?[\"touch ./src/models/EmployeeDictionary.ts\"]). \n\n[Save your work.](command:workbench.action.files.save)\n\n",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 1
+        },
+        "end": {
+          "line": 16,
+          "character": 1
+        },
+        "line": 16
+      },
+      "line": 16
+    },
+    {
+      "title": "Dictionary part 2",
+      "description": "Add the code for EmployeeDictionary:\n\n```ts\nimport Employee from '../models/Employee';\n\ntype EmployeeDictionary = { [id: string]: Employee };\n\nexport default EmployeeDictionary;\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"])",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 1
+        },
+        "end": {
+          "line": 5,
+          "character": 1
+        },
+        "line": 5
+      },
+      "line": 5
+    },
+    {
+      "title": "Dictionary part 3",
+      "description": "This is not a good declaration: { [id: string]: Employee } would have to be repeated in the program.\n\nMake a file to contain a new type *./src/models/EmployeeDicationary.ts*, or [have CodeTour make it](command:codetour.sendTextToTerminal?[\"touch ./src/models/EmployeeDictionary.ts\"]).",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 1
+        },
+        "end": {
+          "line": 5,
+          "character": 1
+        },
+        "line": 5
+      },
+      "line": 5
+    },
+    {
+      "title": "Dictionary part 4",
+      "description": "Add the code for the EmployeeDictionary type:\n\n```ts\nimport Employee from '../models/Employee';\n\ntype EmployeeDictionary = { [ id: string ]: Employee };\n\nexport default EmployeeDictionary;\n```\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./src/models/EmployeeDictionary.ts",
+      "line": 1
+    },
+    {
+      "title": "Dictionary part 5",
+      "description": "Replace the declaration with the new EmployeeDictionary type:\n\n```ts\nimport EmployeeDictionary from './models/EmployeeDictionary';\n\nconst employees: EmployeeDictionary = {\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 3,
+          "character": 1
+        },
+        "end": {
+          "line": 5,
+          "character": 1
+        },
+        "line": 5
+      },
+      "line": 8
+    },
+    {
+      "title": "Walking a dictionary",
+      "description": "Dictionaries can be enumerated with for...in, although there is no guarantee as to the sequence of entities in the loop.\nAdd the following code to the bottom of scratch.ts to walk through the employees:\n\n```ts\n\nconsole.log();\n\nfor (let id in employees) {\n\n    const summary: string = `${id}: ${employees[id].name}`;\n\n    console.log(summary);\n}\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run](command:codetour.sendTextToTerminal?[\"npm run build; npm start\"]).\n",
+      "file": "./src/equipmentManager.ts",
+      "line": 50
+    },
+    {
+      "title": "Cloning objects",
+      "description": "### Shallow Copy\n\nThere are two ways to do a shallow copy of an object, using *Object.assign* or the spread operator ...:\n\n```\nlet janeCopy: Employee = Object.assign({}, employees['12345']);\nlet johnCopy: Employee = { ...employees['54321'] };\n\n```\n\nAny basic types are copied, not referenced from the original object.\nIf a property is a reference, then the reference is copied and the new object shares the original reference.\n\n### Deep Copy\n\nA deep copy means making new copies of every reference.\nThis is obviously a lot more work, and there are Node.js packages that will help with this.\nA simple way to do a deep copy, but not so fast, is to make a JSON string of the object (it copies all the data through every reference)\nand then parse that back into an object where new data is created for each property:\n\n```\nlet janeCopy: Employee = JSON.parse(JSON.stringify(employees['12345']));\n\n```",
+      "file": "./.resources/.placeholder",
+      "line": 1
+    },
+    {
+      "title": "Union",
+      "description": "### Union\n\nUnion types are types built from several other types.\nIt simply means that the variable or arugment can be any one type of the union.\nThis is a type-safe alternative between \"any\" and a single type, a little more flexible.\nIt is especially important if TypeScript is configured with strict null checks, where nulls have to be explitly allowed:\n\n```\n\nfunction getEmployee(id: string | null): Employee | null {\n\n    ...\n}\n```\n\n### Null Coalesing Operator\n\nNow that nulls are more prevalent, TypeScript offers two easy ways to handle checking for nulls (other than *if*).\nThis is a contrieved example, using a default employee of id 0 to make sure there is always an employee object.\nThe first example uses the conditional operator ?, but it requires the function be called two times if it does\nnot return null.\n\nBoth JavaScript and TypeScript provide the null coalesing operator ?? used in the second example, where the result\nof the function is used if not null, and the default value if it is null.\nFundamentally it is a shortcut to the conditional operator, which itself is a shortcut for an if...else statement.\n\n```\nlet employee1: Employee = getEmployee('1234') != null ? getEmployee('1234') : { id: '00000', name: 'No Such Employee' };\n\nlet employee2: Employee = getEmployee('1234') ?? { id: '00000', name: 'No Such Employee' };\n\n```\n\nMore documentation on all the different object types supported in TypeScript is at https://www.typescriptlang.org/docs/handbook/2/objects.html.",
+      "file": "./.resources/.placeholder",
+      "line": 1
+    },
+    {
+      "title": "Tuple",
+      "description": "### Tuple\n\nTypeScript offers a *tuple*, which is fundamentally an array where each element may be a different type.\nThe elements are strongly typed, it is just that they do not all have to be the same.\n\n```\nlet employee: [ number, string ] = [ 12345, 'Jane Smith' ];\n```\n\n### Destructuring Arrays and Tuples\n\nBoth JavaScript and TypeScript offer a useful way to break an array apart into individual variables through *destructuring* into\nan array of variable names.\nIn TypeScript the array of resulting variables must be strongly typed:\n\n```\nlet employee: [ number, string ] = [ 12345, 'Jane Smith' ];\n\nlet [ id: number, name: string ] = employee;\n\nconsole.log(`The employee id ${id} is assigned to ${name}`);\n```\n\n### Object Destructuring\n\nObjects may also be destructured into a literal structure declaring individual variable names.\nNames can be 'bound' during destructuring, effectively creating a new variable that is assigned from the old member name:\n\n```\nconst employee = { id: '12345', name: 'Jane Smith' };\n\nconst { id: employeeId, name } = employee;\n\nconsole.log(`The employee id ${employeeId} is assigned to ${name}`);\n```\n",
+      "file": "./.resources/.placeholder",
+      "line": 1
+    },
+    {
+      "title": "Stop",
+      "description": "```\n\n\n\n```\n\nCongratulations, you have completed this lab!&nbsp;&nbsp;&nbsp;&nbsp;![stop](./.resources/stop.png)  \n\nWhen it is time to start the next lab click the next tour link below ![below](./.resources/below-optimized.png)",
+      "file": "./src/equipmentManager.ts",
+      "line": 99
+    }
+  ]
+}

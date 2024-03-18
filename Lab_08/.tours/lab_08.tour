@@ -1,0 +1,170 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Lab_08: Document Object Model",
+  "nextTour": "Lab_09: Web Service",
+  "steps": [
+    {
+      "title": "DOM",
+      "description": "![TS](./.resources/ts.png)\n\n## Browser and DOM\n\nFirst things first:\n* Before you begin this lab please [close any open terminal windows](command:workbench.action.terminal.killAll).\n* Some new tools have been added to *package.json* (up above) to support building a client-side applicatin. [Install the Node.js modules](command:codetour.sendTextToTerminal?[\"npm install\"]) for this copy of the lab project. \n\n### Application bundling\n\nBrowsers do not understand TypeScript.\nIt makes sense, TypeScript has to be compiled to JavaScript to execute, in Node.js or in a web browser.\n\nIn the web model the HTTP protocol is used to respond to requests from a browser, the response is a resource.\nTraditionally that resource was an HTML file.\nOther resources were added, including JavaScript files.\n\nAs programs became more complicated, configuring a browser to load multiple JavaScript files becomes more difficult.\nEspecially when modules are involved, because once the JS is loaded the folder structure is lost.\n\nSomehow the compiled TypeScript needs to be delievered by a web server, and that is handled by \"bundlers\" that create\non JS resource out of multiple files.\nThen it is simple to load the single resource to the browser.\n\n![Bundled](./.resources/bundled-js.png)\n",
+      "file": "./package.json",
+      "line": 24
+    },
+    {
+      "title": "Webpack",
+      "description": "![Webpack](./.resources/webpack-darkened-noshadow.png)\n### Webpack\n\nWebpack is the bundler installed by default when an Angular or React project is created, so this project will go with that.\nThe configuration has already been set for this project, because Webpack is not the focus of these labs.\nIt is only necessary to build the bundle and deliver it to the web browser.",
+      "file": "./.resources/.placeholder",
+      "line": 1
+    },
+    {
+      "title": "Project structure",
+      "description": "Webpack will build the bundle.\nThere still must be a distribution folder where the static parts of the web application are served from: index.html, etc.\n\nThis structure will be used for the distribution folder, located at the top of the workspace (adjacent to src).\nA configuration file for webpack at the top of the project structure must be set up: webpack.config.ts.\n\n```\ndist/\n    assets/\n        script/\n        style/\n            main.css\n    index.html\nwebpack.config.ts\n```\n\nWebpack will compile and bundle the TypeScript program into the dist/assets/script/ folder.\n\nThere is a favicon.ico file in the project folder ./.resources.\nPutting this at the top level of dist/ will keep the browser from complaining about the file not found.\n\nClick here to have codetour [create the folders and files, and copy the favicon.ico file](command:codetour.sendTextToTerminal?[\"mkdir ./dist ./dist/assets ./dist/assets/script ./dist/assets/style; touch ./dist/assets/style/main.css ./dist/index.html ./webpack.config.ts; cp ./.resources/favicon.ico ./dist\"]).\n\n",
+      "file": "./.resources/.placeholder",
+      "line": 1
+    },
+    {
+      "title": "Webpack configuration",
+      "description": "### Webpack Configuration\n\nAdd the configuration to *webpack.config.ts*.\nStart looking at https://webpack.js.org/configuration/configuration-languages// for more detailed information\nabout Webpack and writing the configuration file in TypeScript.\nThis example pulls in other settings defined elsewhere in the Webpack documentation.\n\n```ts\nimport path from 'path';\nimport webpack, { Configuration } from 'webpack';\nimport * as webpackDevServer from 'webpack-dev-server';\n\nconst config: Configuration = {\n\n    entry: './src/equipmentManager.ts',\n    mode: 'development',\n    context: __dirname,\n    devtool: 'source-map',\n    target: 'web',\n    module: {\n        rules: [\n            {\n                test: /\\.(ts|js)?$/,\n                exclude: /node_modules/,\n                use: {\n                    loader: 'babel-loader',\n                    options: {\n                        presets: ['@babel/preset-env', '@babel/preset-typescript']\n                    }\n                }\n            }\n        ]\n    },\n    resolve: {\n        extensions: ['.ts', '.js'],\n        fallback: {\n            assert: require.resolve('assert-browserify'),\n            console: require.resolve('console-browserify'),\n            util: require.resolve('util')\n        }\n    },\n    plugins: [\n        new webpack.ProvidePlugin({ process: 'process/browser', Buffer: [ 'buffer', 'Buffer' ] })\n    ],\n    output: {\n        path: path.resolve(__dirname, 'dist/assets/script/'),\n        publicPath: '/assets/script/',\n        filename: 'equipment-manager-bundle.js',\n    },\n    devServer: {\n        static: path.join(__dirname, 'dist'),\n        compress: true,\n        port: 3080\n    }\n};\n\nexport default config;\n```\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./webpack.config.ts",
+      "line": 1
+    },
+    {
+      "title": "Cascading Style Sheet",
+      "description": "### Cascading Style Sheet\n\nCascading Style Sheets (CSS) are used link style information (color, font, etc.) to elements in the DOM.\nEntries in CSS consist of a selector with a list of styles and values.\nThe selector is an expression that identifies one or more elements to apply the style to.\nSelectors are described at https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors, which is part of the\nfull documentation on CSS.\n\nThis selector will set the background-color style of the whole document to 'lightgrey':\n\n```css\nhtml {\n    background-color: lightgrey;\n}\n```\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./dist/assets/style/main.css",
+      "line": 1
+    },
+    {
+      "title": "Hello, World!",
+      "description": "### Hello, World!\n\nThe *index.html* file contains HTML to present the landing page for the application.\nThis contains a link in the \\<head> section to include the main.css file that was just created.\nThe selector in that style sheet will cause the background of this page to be light grey.\n\nThe content of the body simply says 'Hello, World!':\n\n```html\n<html>\n    <head>\n        <title>Equipment Manager</title>\n        <link rel=\"stylesheet\" href=\"assets/style/main.css\" /> \n    </head>\n    <body>\n        Hello, World!\n    </body>\n</html>\n\n```\n\n[Save your work](command:workbench.action.files.save), then [build and run in Webpack](command:codetour.sendTextToTerminal?[\"npm run webpack-dev-server\"]).\n\nLaunch the page in the browser from http://localhost:3080 (this will translate through port forwarding to an Internet cloud address).\n",
+      "file": "./dist/index.html",
+      "line": 1
+    },
+    {
+      "title": "TypeScript configuration",
+      "description": "Before you continue this lab please [close any open terminal windows](command:workbench.action.terminal.killAll).\n\n### TypeScript configuration\n\nThere are some additions that must be made to *tsconfig.json* for Webpack to work:\n* \"allowSyntheticDefaultImports\": true -\n* \"lib\": { \"DOM\" } - to import the DOM library for TypeScript\n* \"ts-node\": { \"compilerOptions\": { \"module\": \"CommonJS\" }} - Webpack uses CommonJS instead of ES2015 as the module format\n\n```json\n{\n    \"extends\": \"@tsconfig/node20/tsconfig.json\",\n    \"include\": [\n        \"src/**/*\"\n    ],\n    \"exclude\": [\n        \"**/*.spec.ts\"\n    ],\n    \"compilerOptions\": {\n        \"allowSyntheticDefaultImports\": true,\n        \"esModuleInterop\": true,\n        \"outDir\": \"build\",\n        \"lib\": [\n            \"DOM\"\n        ]\n    },\n    \"ts-node\": {\n        \"compilerOptions\": {\n            \"module\": \"CommonJS\"\n        }\n    }\n}\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./tsconfig.json",
+      "line": 1
+    },
+    {
+      "title": "Equipment items part 1",
+      "description": "### Wrap the *equipmentManager* Functionality\n\nWrap the code in *equipmentManabger* in a function, *main*.\nWe need to delay displaying output until the DOM has loaded,\nso main can be called when that is ready:\n\n```ts\nfunction main(): void {\n\n    const employees: EmployeeDictionary = {\n\n        '12345': { id: '12345', name: 'Jane Smith' },\n        '54321': { id: '54321', name: 'John Smith' }\n    };\n\n    const equipment: EquipmentItem[] = [\n\n        { id: 'C001', description: 'laptop computer', employee: employees['12345'] },\n        { id: 'C002', description: 'laptop computer', employee: employees['54321'] },\n        { id: 'A099', description: 'company automobile', employee: employees['12345'] }\n    ];\n\n    for (let item of equipment) {\n\n        const summary: string = `${item.id}: ${item.description} assigned to ${item.employee.name}`;\n\n        console.log(summary);\n    }\n\n    console.log();\n\n    for (let id in employees) {\n\n        const summary: string = `${id}: ${employees[id].name}`;\n\n        console.log(summary);\n    }\n}\n```\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 1
+        },
+        "end": {
+          "line": 33,
+          "character": 1
+        },
+        "line": 33
+      },
+      "line": 33
+    },
+    {
+      "title": "Equipment items part 2",
+      "description": "### Equipment Items\n\nThe objects in the DOM provide methods to manipulate themselves.\nEverything starts at the top with the *document* object.\n\nUpdate the showEquipment function to create DOM elements and write\nthe output into them:\n1. Use *document.getElementById* to locate an element identified by the id 'content'.\n1. Use *document.createElement* to create two new DOM elements: span and break (br).\n1. Set the text into the span element.\n1. Append the span and br elements to the content element, immediately displaying them.\n\n```ts\n    let content: HTMLElement | null = document.getElementById('content') as HTMLElement;\n\n    for (let item of equipment) {\n\n        const summary: string = `${item.id}: ${item.description} assigned to ${item.employee.name}`;\n        const span: HTMLElement = document.createElement('span');\n        const br: HTMLElement = document.createElement('br');\n\n        span.innerText = summary;\n\n        content.append(span, br);\n    }\n\n```\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 20,
+          "character": 1
+        },
+        "end": {
+          "line": 26,
+          "character": 1
+        },
+        "line": 26
+      },
+      "line": 26
+    },
+    {
+      "title": "Equipment items part 3",
+      "description": "Change the console.log of an empty line to append a new br element to the page content:\n\n```ts\n    content.append(document.createElement('br'));\n\n```\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 33,
+          "character": 1
+        },
+        "end": {
+          "line": 34,
+          "character": 1
+        },
+        "line": 34
+      },
+      "line": 34
+    },
+    {
+      "title": "Equipment items part 4",
+      "description": "Modify the loop of employees to create and append DOM elements as well, and\nappend a br element after the loop:\n\n```ts\n    for (let id in employees) {\n\n        const summary: string = `${id}: ${employees[id].name}`;\n        const span: HTMLElement = document.createElement('span');\n        const br: HTMLElement = document.createElement('br');\n\n        span.innerText = summary;\n\n        content.append(span, br);\n    }\n\n    content.append(document.createElement('br'));\n\n```\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 35,
+          "character": 1
+        },
+        "end": {
+          "line": 41,
+          "character": 1
+        }
+      },
+      "line": 41
+    },
+    {
+      "title": "Equipment items part 5",
+      "description": "*main* will be called when the browser window has finished loading.\nThe DOM provides event handlers, and the event handler for the window\nmay be configured by calling *window.addEventListener*.\n*window* is the default object on a page, so *addEventListener* is sufficient:\n\n```ts\n\n\naddEventListener('load', main);\n\n```\n\nThis could have been set up as an arrow function at the top where main was declared, but modules should\ndo what they do at the bottom because that is where it is expected.\nThis is not strictly a module but the rule applies.\n\n[Save your work.](command:workbench.action.files.save)",
+      "file": "./src/equipmentManager.ts",
+      "selection": {
+        "start": {
+          "line": 48,
+          "character": 1
+        },
+        "end": {
+          "line": 48,
+          "character": 1
+        }
+      },
+      "line": 48
+    },
+    {
+      "title": "Equipment items part 6",
+      "description": "### Link the Bundle\n\nWebpack has been configured to write the bundle as ./dist/assets/script/equipment-manager-bundle.js, so the\nindex.html file must be updated to load that resource.\nScript tags cannot use the HTML short form of /> at the end of the tag, there must be a closing script tag.\n\n```html\n    <script src=\"/assets/script/equipment-manager-bundle.js\"></script>\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n",
+      "file": "./dist/index.html",
+      "selection": {
+        "start": {
+          "line": 6,
+          "character": 1
+        },
+        "end": {
+          "line": 6,
+          "character": 1
+        }
+      },
+      "line": 6
+    },
+    {
+      "title": "Equipment items part 7",
+      "description": "### Place for Content\n\nReplace the *Hello, World!* text with a div element where the equipment items and employees will be written.\nThis has the id *content* to match what we used in *employeeManager.ts*.\n\n```html\n    <div id=\"content\"></div>\n\n```\n\n[Save your work.](command:workbench.action.files.save)\n\n[Start](command:codetour.sendTextToTerminal?[\"npm run webpack-dev-server\"]) the webpack development server with *npm run webpack-dev-server*.\n\nLaunch the application from http://localhost:3080/index.html (this will translate through port forwarding to an Internet cloud address).\n",
+      "file": "./dist/index.html",
+      "selection": {
+        "start": {
+          "line": 10,
+          "character": 1
+        },
+        "end": {
+          "line": 11,
+          "character": 1
+        }
+      },
+      "line": 11
+    },
+    {
+      "title": "Stop",
+      "description": "```\n\n\n\n```\n\nCongratulations, you have completed this lab!&nbsp;&nbsp;&nbsp;&nbsp;![stop](./.resources/stop.png)  \n\nWhen it is time to start the next lab click the next tour link below ![below](./.resources/below-optimized.png)",
+      "file": "./src/equipmentManager.ts",
+      "line": 99
+    }
+  ]
+}
