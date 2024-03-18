@@ -57,6 +57,7 @@ Configuration steps:
 * Click the *Create codespace on main* button to launch the codespace.
 * When Visual Studio Code opens and the toast notification pops up, click the *Open Workspace* button to open the workspace file.
 * If you miss the toast notification, there will be another chance to open the workspace file as soon as Visual Studio Code finishes loading everything.
+* If the first CodeTour does not open in the multi-workspace environment start the tour *Lab_01: Configure the project*.
 
 If you closed the codespace and want to reopen it from your Github account, click the "hamburger" menu at the upper
 left corner of the GitHub page and select *Codespaces* to manage your codespaces.
